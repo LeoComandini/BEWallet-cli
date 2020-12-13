@@ -32,6 +32,7 @@ struct BEWalletCliOpt {
 enum BEWalletCliSubcommands {
     SyncWallet,
     GetAddress,
+    GetBalance,
 }
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -54,6 +55,12 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         BEWalletCliSubcommands::GetAddress => {
             let ap = wallet.address().unwrap();
             println!("Address: {} (pointer: {})", ap.address, ap.pointer);
+        }
+        BEWalletCliSubcommands::GetBalance => {
+            let balances = wallet.balance().unwrap();
+            for (key, val) in balances.iter() {
+                println!("{}: {}", key, val);
+            }
         }
     }
     Ok(())
