@@ -33,6 +33,7 @@ enum BEWalletCliSubcommands {
     SyncWallet,
     GetAddress,
     GetBalance,
+    GetTransactions,
 }
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -51,7 +52,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             println!("Sync: started");
             wallet.sync().unwrap();
             println!("Sync: done");
-        },
+        }
         BEWalletCliSubcommands::GetAddress => {
             let ap = wallet.address().unwrap();
             println!("Address: {} (pointer: {})", ap.address, ap.pointer);
@@ -60,6 +61,17 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             let balances = wallet.balance().unwrap();
             for (key, val) in balances.iter() {
                 println!("{}: {}", key, val);
+            }
+        }
+        BEWalletCliSubcommands::GetTransactions => {
+            let mut opt = bewallet::model::GetTransactionsOpt::default();
+            opt.count = 100;
+            let transactions = wallet.transactions(&opt).unwrap();
+            for transaction in transactions.iter() {
+                println!("txid: {}", transaction.txid);
+                for (key, val) in transaction.balances.iter() {
+                    println!("  {}: {}", key, val);
+                }
             }
         }
     }
