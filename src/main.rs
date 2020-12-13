@@ -37,7 +37,7 @@ enum BEWalletCliSubcommands {
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let args = BEWalletCliOpt::from_args();
 
-    let mut config = bewallet::Network::default();
+    let mut config = bewallet::Config::default();
     config.electrum_url = Some(args.electrum_url.clone());
     config.liquid = args.liquid;
     config.mainnet = args.mainnet;
