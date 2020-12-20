@@ -29,11 +29,24 @@ struct BEWalletCliOpt {
 }
 
 #[derive(Debug, StructOpt)]
+struct SendOpt {
+    #[structopt(long)]
+    address: String,
+
+    #[structopt(long)]
+    satoshi: u64,
+
+    #[structopt(long)]
+    asset: Option<String>,
+}
+
+#[derive(Debug, StructOpt)]
 enum BEWalletCliSubcommands {
     SyncWallet,
     GetAddress,
     GetBalance,
     GetTransactions,
+    SendTransaction(SendOpt),
 }
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -75,6 +88,18 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                     println!("  {}: {}", key, val);
                 }
             }
+        }
+        BEWalletCliSubcommands::SendTransaction(opt_send) => {
+            let mut opt_create = bewallet::model::CreateTransactionOpt::default();
+            opt_create.addressees.push(bewallet::model::AddressAmount {
+                address: opt_send.address,
+                satoshi: opt_send.satoshi,
+                asset_tag: opt_send.asset,
+            });
+            let mut tx = wallet.create_tx(&mut opt_create).unwrap().transaction;
+            wallet.sign_tx(&mut tx, &args.mnemonic).unwrap();
+            wallet.broadcast_tx(&tx).unwrap();
+            println!("txid: {}", tx.txid());
         }
     }
     Ok(())
