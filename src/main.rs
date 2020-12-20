@@ -41,6 +41,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let mut config = bewallet::Config::default();
     config.electrum_url = Some(args.electrum_url.clone());
+    config.tls = Some(!args.development);
     config.liquid = args.liquid;
     config.mainnet = args.mainnet;
     config.development = args.development;
