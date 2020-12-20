@@ -47,6 +47,7 @@ enum BEWalletCliSubcommands {
     GetBalance,
     GetTransactions,
     SendTransaction(SendOpt),
+    GetCoins,
 }
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -100,6 +101,17 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             wallet.sign_tx(&mut tx, &args.mnemonic).unwrap();
             wallet.broadcast_tx(&tx).unwrap();
             println!("txid: {}", tx.txid());
+        }
+        BEWalletCliSubcommands::GetCoins => {
+            for utxo in wallet.utxos().unwrap() {
+                println!(
+                    "outpoint {}:{}",
+                    utxo.outpoint.txid().to_string(),
+                    utxo.outpoint.vout()
+                );
+                println!("  satoshi: {}", utxo.satoshi);
+                println!("  asset:   {}", utxo.asset);
+            }
         }
     }
     Ok(())
