@@ -1,5 +1,5 @@
-use structopt::StructOpt;
 use bewallet;
+use structopt::StructOpt;
 
 /// BEWallet Command Line Interface
 #[derive(Debug, StructOpt)]
@@ -7,7 +7,7 @@ struct BEWalletCliOpt {
     /// The db path
     #[structopt(long)]
     data_root: String,
-    
+
     /// Mnemonic
     #[structopt(long)]
     mnemonic: String,
@@ -46,7 +46,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     config.mainnet = args.mainnet;
     config.development = args.development;
 
-    let wallet = bewallet::ElectrumWallet::new(config.clone(), &args.data_root, &args.mnemonic).unwrap();
+    let wallet =
+        bewallet::ElectrumWallet::new(config.clone(), &args.data_root, &args.mnemonic).unwrap();
 
     match args.subcommand {
         BEWalletCliSubcommands::SyncWallet => {
