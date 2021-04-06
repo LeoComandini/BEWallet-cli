@@ -216,9 +216,9 @@ dependencies = [
 
 [[package]]
 name = "bitcoin"
-version = "0.25.2"
+version = "0.26.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "aefc9be9f17185f4ebccae6575d342063f775924d57df0000edb1880c0fb7095"
+checksum = "1ec5f88a446d66e7474a3b8fa2e348320b574463fb78d799d90ba68f79f48e0e"
 dependencies = [
  "bech32",
  "bitcoin_hashes 0.9.4",
@@ -496,9 +496,9 @@ checksum = "134951f4028bdadb9b84baf4232681efbf277da25144b9b0ad65df75946c422b"
 
 [[package]]
 name = "electrum-client"
-version = "0.3.0-beta.1"
+version = "0.7.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "bb3817250d6404c58acfb2ad9e083090f493456171ca6bb90c0596cfd48120fe"
+checksum = "4cab4d90cc575a7daab4cfed9e315912a88071bc47462e6be57516a2f01ccc89"
 dependencies = [
  "bitcoin",
  "log",
@@ -512,9 +512,9 @@ dependencies = [
 
 [[package]]
 name = "elements"
-version = "0.13.0"
+version = "0.16.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8550a7279d75568178505c7f79eabc16d5ea4b10afcb90e8478eac77656fbc46"
+checksum = "e77124f1ecdbeb92691beae289c44553df24c94c86dd3bc07a7037c2064ac3d3"
 dependencies = [
  "bitcoin",
  "bitcoin_hashes 0.9.4",
@@ -1152,9 +1152,9 @@ dependencies = [
 
 [[package]]
 name = "secp256k1"
-version = "0.19.0"
+version = "0.20.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c6179428c22c73ac0fbb7b5579a56353ce78ba29759b3b8575183336ea74cdfb"
+checksum = "733b114f058f260c0af7591434eef4272ae1a8ec2751766d3cb89c6df8d5e450"
 dependencies = [
  "rand 0.6.5",
  "secp256k1-sys",
@@ -1163,9 +1163,9 @@ dependencies = [
 
 [[package]]
 name = "secp256k1-sys"
-version = "0.3.0"
+version = "0.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "11553d210db090930f4432bea123b31f70bbf693ace14504ea2a35e796c28dd2"
+checksum = "67e4b6455ee49f5901c8985b88f98fb0a0e1d90a6661f5a03f4888bd987dad29"
 dependencies = [
  "cc",
 ]
@@ -1612,7 +1612,7 @@ checksum = "b5a972e5669d67ba988ce3dc826706fb0a8b01471c088cb0b6110b805cc36aed"
 [[package]]
 name = "wally"
 version = "0.1.0"
-source = "git+https://github.com/RCasatta/wally?rev=91b0f462be4ff7ba05821fe040cb63a6ac45b998#91b0f462be4ff7ba05821fe040cb63a6ac45b998"
+source = "git+https://github.com/LeoComandini/wally?rev=b9bf21255b8d114c18e948c51404e6d7bf8b25f3#b9bf21255b8d114c18e948c51404e6d7bf8b25f3"
 dependencies = [
  "elements",
  "hex",
