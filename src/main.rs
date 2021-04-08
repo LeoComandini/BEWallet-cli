@@ -58,8 +58,7 @@ fn main() -> Result<(), bewallet::Error> {
             spv_enabled,
             &args.data_root,
             &args.mnemonic,
-        )
-        .unwrap()
+        )?
     } else {
         let validate_domain = false;
         let tls = false;
@@ -71,41 +70,41 @@ fn main() -> Result<(), bewallet::Error> {
             spv_enabled,
             &args.data_root,
             &args.mnemonic,
-        )
-        .unwrap()
+        )?
     };
 
     match args.subcommand {
         BEWalletCliSubcommands::SyncWallet => {
-            wallet.sync().unwrap();
+            wallet.sync()?;
         }
         BEWalletCliSubcommands::GetAddress => {
-            let address = wallet.address().unwrap();
+            let address = wallet.address()?;
             println!("{}", address.to_string());
         }
         BEWalletCliSubcommands::GetBalance => {
-            let balances = wallet.balance().unwrap();
+            let balances = wallet.balance()?;
             println!("{}", serde_json::to_string(&balances).unwrap());
         }
         BEWalletCliSubcommands::GetTransactions => {
             let mut opt = bewallet::GetTransactionsOpt::default();
             opt.count = 100;
-            let transactions = wallet.transactions(&opt).unwrap();
+            let transactions = wallet.transactions(&opt)?;
             println!("{}", serde_json::to_string(&transactions).unwrap());
         }
         BEWalletCliSubcommands::SendTransaction(opt_send) => {
             let mut opt_create = bewallet::CreateTransactionOpt::default();
-            opt_create.addressees.push(
-                bewallet::Destination::new(&opt_send.address, opt_send.satoshi, &opt_send.asset)
-                    .unwrap(),
-            );
-            let mut tx = wallet.create_tx(&mut opt_create).unwrap().transaction;
-            wallet.sign_tx(&mut tx, &args.mnemonic).unwrap();
-            wallet.broadcast_tx(&tx).unwrap();
+            opt_create.addressees.push(bewallet::Destination::new(
+                &opt_send.address,
+                opt_send.satoshi,
+                &opt_send.asset,
+            )?);
+            let mut tx = wallet.create_tx(&mut opt_create)?.transaction;
+            wallet.sign_tx(&mut tx, &args.mnemonic)?;
+            wallet.broadcast_tx(&tx)?;
             println!("{}", tx.txid());
         }
         BEWalletCliSubcommands::GetCoins => {
-            let utxos = wallet.utxos().unwrap();
+            let utxos = wallet.utxos()?;
             println!("{}", serde_json::to_string(&utxos).unwrap());
         }
     }
