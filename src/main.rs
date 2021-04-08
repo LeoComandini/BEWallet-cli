@@ -44,7 +44,7 @@ enum BEWalletCliSubcommands {
     GetCoins,
 }
 
-fn main() -> Result<(), Box<dyn std::error::Error>> {
+fn main() -> Result<(), bewallet::Error> {
     let args = BEWalletCliOpt::from_args();
     let spv_enabled = false;
 
@@ -77,30 +77,21 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     match args.subcommand {
         BEWalletCliSubcommands::SyncWallet => {
-            println!("Sync: started");
             wallet.sync().unwrap();
-            println!("Sync: done");
         }
         BEWalletCliSubcommands::GetAddress => {
             let address = wallet.address().unwrap();
-            println!("Address: {}", address.to_string());
+            println!("{}", address.to_string());
         }
         BEWalletCliSubcommands::GetBalance => {
             let balances = wallet.balance().unwrap();
-            for (key, val) in balances.iter() {
-                println!("{}: {}", key, val);
-            }
+            println!("{}", serde_json::to_string(&balances).unwrap());
         }
         BEWalletCliSubcommands::GetTransactions => {
             let mut opt = bewallet::GetTransactionsOpt::default();
             opt.count = 100;
             let transactions = wallet.transactions(&opt).unwrap();
-            for transaction in transactions.iter() {
-                println!("txid: {}", transaction.txid);
-                for (key, val) in transaction.balances.iter() {
-                    println!("  {}: {}", key, val);
-                }
-            }
+            println!("{}", serde_json::to_string(&transactions).unwrap());
         }
         BEWalletCliSubcommands::SendTransaction(opt_send) => {
             let mut opt_create = bewallet::CreateTransactionOpt::default();
@@ -111,18 +102,11 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             let mut tx = wallet.create_tx(&mut opt_create).unwrap().transaction;
             wallet.sign_tx(&mut tx, &args.mnemonic).unwrap();
             wallet.broadcast_tx(&tx).unwrap();
-            println!("txid: {}", tx.txid());
+            println!("{}", tx.txid());
         }
         BEWalletCliSubcommands::GetCoins => {
-            for utxo in wallet.utxos().unwrap() {
-                println!(
-                    "outpoint {}:{}",
-                    utxo.txo.outpoint.txid.to_string(),
-                    utxo.txo.outpoint.vout
-                );
-                println!("  satoshi: {}", utxo.unblinded.value);
-                println!("  asset:   {}", utxo.unblinded.asset);
-            }
+            let utxos = wallet.utxos().unwrap();
+            println!("{}", serde_json::to_string(&utxos).unwrap());
         }
     }
     Ok(())

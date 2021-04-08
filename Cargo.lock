@@ -177,6 +177,7 @@ name = "bewallet-cli"
 version = "0.1.0"
 dependencies = [
  "bewallet",
+ "serde_json 1.0.60",
  "structopt",
 ]
 
