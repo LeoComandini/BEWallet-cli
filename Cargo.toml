@@ -9,5 +9,4 @@ edition = "2018"
 [dependencies]
 serde_json = "1.0"
 structopt = "0.3.13"
-bewallet = { git = "https://github.com/LeoComandini/BEWallet", rev = "482e7c3b2003597214295a759348c7c9c9b333d3" }
-#bewallet = { path = "../BEWallet" }
+bewallet = { git = "https://github.com/LeoComandini/BEWallet" }
