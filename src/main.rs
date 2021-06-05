@@ -35,6 +35,21 @@ struct SendOpt {
 }
 
 #[derive(Debug, StructOpt)]
+struct LiquidexMakeOpt {
+    #[structopt(long)]
+    txid: String,
+
+    #[structopt(long)]
+    vout: u32,
+
+    #[structopt(long)]
+    asset: String,
+
+    #[structopt(long)]
+    rate: f64,
+}
+
+#[derive(Debug, StructOpt)]
 enum BEWalletCliSubcommands {
     SyncWallet,
     GetAddress,
@@ -42,6 +57,7 @@ enum BEWalletCliSubcommands {
     GetTransactions,
     SendTransaction(SendOpt),
     GetCoins,
+    LiquidexMake(LiquidexMakeOpt),
 }
 
 fn main() -> Result<(), bewallet::Error> {
@@ -106,6 +122,20 @@ fn main() -> Result<(), bewallet::Error> {
         BEWalletCliSubcommands::GetCoins => {
             let utxos = wallet.utxos()?;
             println!("{}", serde_json::to_string(&utxos).unwrap());
+        }
+        BEWalletCliSubcommands::LiquidexMake(opt) => {
+            let opt = bewallet::LiquidexMakeOpt::new(
+                &opt.txid,
+                opt.vout,
+                &opt.asset,
+                opt.rate,
+            )?;
+            
+            // Insert asset in local db so the wallet can receive it
+            wallet.liquidex_assets_insert(opt.asset_id)?;
+
+            let proposal = wallet.liquidex_make(&opt, &args.mnemonic)?;
+            println!("{}", serde_json::to_string(&proposal)?);
         }
     }
     Ok(())
