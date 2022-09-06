@@ -18,6 +18,9 @@ struct BEWalletCliOpt {
     #[structopt(long)]
     mainnet: bool,
 
+    #[structopt(long)]
+    testnet: bool,
+
     #[structopt(subcommand)]
     subcommand: BEWalletCliSubcommands,
 }
@@ -78,6 +81,17 @@ fn main() -> Result<(), bewallet::Error> {
         let validate_domain = true;
         let tls = true;
         bewallet::ElectrumWallet::new_mainnet(
+            &args.electrum_url,
+            tls,
+            validate_domain,
+            spv_enabled,
+            &args.data_root,
+            &args.mnemonic,
+        )?
+    } else if args.testnet {
+        let validate_domain = true;
+        let tls = true;
+        bewallet::ElectrumWallet::new_testnet(
             &args.electrum_url,
             tls,
             validate_domain,
