@@ -137,6 +137,7 @@ fn main() -> Result<(), bewallet::Error> {
                 &opt_send.address,
                 opt_send.satoshi,
                 &opt_send.asset,
+                wallet.network(),
             )?);
             let mut tx = wallet.create_tx(&mut opt_create)?.transaction;
             wallet.sign_tx(&mut tx, &args.mnemonic)?;
