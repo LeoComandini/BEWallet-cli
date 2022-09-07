@@ -150,10 +150,6 @@ fn main() -> Result<(), bewallet::Error> {
         }
         BEWalletCliSubcommands::LiquidexMake(opt) => {
             let opt = bewallet::LiquidexMakeOpt::new(&opt.txid, opt.vout, &opt.asset, opt.rate)?;
-
-            // Insert asset in local db so the wallet can receive it
-            wallet.liquidex_assets_insert(opt.asset_id)?;
-
             let proposal = wallet.liquidex_make(&opt, &args.mnemonic)?;
             println!("{}", serde_json::to_string(&proposal)?);
         }
